@@ -17,6 +17,112 @@ info:
 servers:
   - url: http://localhost
 paths:
+  /estate:
+    post:
+      summary: This endpoint creats and stores new estate in the database.
+      requestBody:
+        description: A JSON object contains width and length of the estate.
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/EstateRequest"
+      responses:
+        '201':
+          description: Successfully creating estate.
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/EstateSuccessResponse'
+        '400':
+          description: Invalid value or format
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /estate/{estateId}/tree:
+    post:
+      summary: This endpoint stores tree data in a given estate with the id.
+      parameters:
+        - name: estateId
+          in: path
+          description: ID of estate for tree to be added.
+          required: true
+          schema:
+            type: string
+            example: aaaaa-bbbbb-ccccc-ddddd
+      requestBody: 
+        description: A JSON object contains the tree data.
+        content:
+          'application/json':
+            schema:
+              $ref: "#/components/schemas/EstateTreeRequest"
+      responses:
+        '201':
+          description: Successfully creating a tree.
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/EstateTreeSuccessResponse"
+        '404':
+          description: Estate not found.
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '400':
+          description: Invalid value or format.
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /estate/{estateId}/stats:
+    get:
+      summary: This endpoint will simply return the stats of the tree in the estate with ID.
+      parameters:
+        - name: estateId
+          in: path
+          description: ID of the estate.
+          required: true
+          schema:
+            type: string
+            example: aaaaa-bbbbb-ccccc-ddddd
+      responses:
+        '200':
+          description: Request successful.
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/EstateStatsSuccessResponse"
+        '404':
+          description: Estate not found.
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /estate/{estateId}/drone-plan:
+    get:
+      summary: This endpoint will simply return the sum distance of the drone monitoring travel in the estate with ID.
+      parameters:
+        - name: estateId
+          in: path
+          description: ID of the estate.
+          required: true
+          schema:
+            type: string
+            example: aaaaa-bbbbb-ccccc-ddddd
+      responses:
+        '200':
+          description: Success.
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/DronePlanSuccessResponse"
+        '404':
+          description: Estate not found.
+          content:
+            'application/json':
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /hello:
     get:
       summary: This is just a test endpoint to get you started.
@@ -41,6 +147,87 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
+    EstateRequest:
+      type: object
+      properties:
+        width:
+          description: Estate's width
+          type: integer
+          example: 3
+          minimum: 1
+          maximum: 50000
+        length:
+          description: Estate's length
+          type: integer
+          example: 2
+          minimum: 1
+          maximum: 50000
+      required:
+        - width
+        - length
+    EstateSuccessResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: aaaaa-bbbbb-ccccc-ddddd
+      required:
+        - id
+    EstateTreeRequest:
+      type: object
+      properties:
+        x:
+          type: integer
+          example: 2
+        y:
+          type: integer
+          example: 2
+        height:
+          type: integer
+          example: 10
+          maximum: 30
+          minimum: 1
+      required:
+        - x
+        - y
+        - height
+    EstateTreeSuccessResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: aaaaa-bbbbb-ccccc-dddd
+      required:
+        - id
+    EstateStatsSuccessResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+          example: 0
+        max:
+          type: integer
+          example: 0
+        min:
+          type: integer
+          example: 0
+        median:
+          type: number
+          format: float
+          example: 0
+      required:
+        - count
+        - max
+        - min
+        - median
+    DronePlanSuccessResponse:
+      type: object
+      properties:
+        distance:
+          type: integer
+          example: 100
+      required:
+        - distance
     HelloResponse:
       type: object
       required:

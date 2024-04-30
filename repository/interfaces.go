@@ -4,8 +4,15 @@
 // interfaces using mockgen. See the Makefile for more information.
 package repository
 
-import "context"
+import (
+	"context"
+
+	"github.com/SawitProRecruitment/UserService/domain"
+)
 
 type RepositoryInterface interface {
-	GetTestById(ctx context.Context, input GetTestByIdInput) (output GetTestByIdOutput, err error)
+	CreateEstate(ctx context.Context, estate *domain.Estate) (createdEstate *domain.Estate, err error)
+	GetEstateByID(ctx context.Context, id string) (estate *domain.Estate, err error)
+	CreateTree(ctx context.Context, tree *domain.Tree) (createdTree *domain.Tree, err error)
+	GetAllTreesByEstateID(ctx context.Context, estateId string) (trees []*domain.Tree, err error)
 }

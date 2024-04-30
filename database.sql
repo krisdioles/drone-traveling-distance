@@ -10,3 +10,17 @@ CREATE TABLE test (
 	id serial PRIMARY KEY,
 	name VARCHAR ( 50 ) UNIQUE NOT NULL,
 );
+
+CREATE TABLE estates (
+	id uuid DEFAULT gen_random_uuid(),
+	length INT NOT NULL,
+	width INT NOT NULL
+);
+
+CREATE TABLE trees (
+	id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+	x INT NOT NULL,
+	y INT NOT NULL,
+	height INT NOT NULL,
+	estate_id uuid NOT NULL
+);
